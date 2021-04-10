@@ -1,4 +1,4 @@
-package com.example.testapp
+package com.example.reminderapp
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
