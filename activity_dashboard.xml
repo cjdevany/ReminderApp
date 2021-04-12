@@ -6,4 +6,30 @@
     android:layout_height="match_parent"
     tools:context=".DashboardActivity">
 
+    <Button
+        android:id="@+id/dashboardAddTaskBtn"
+        android:layout_width="84dp"
+        android:layout_height="48dp"
+        android:text="Add"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/dashboardAccountBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:text="My Account"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <ListView
+        android:id="@+id/dashboardListView"
+        android:layout_width="347dp"
+        android:layout_height="628dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.3" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
