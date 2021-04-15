@@ -98,9 +98,10 @@ class AddTaskActivity : AppCompatActivity() {
                     // Add one day each time
                     deadlineCalendar.add(Calendar.DATE, 1)
                     // Convert it to a string to format with time.
-                    var nextTaskDate = deadlineCalendar.time.toString()
+                    var nextTaskDate = deadlineCalendar.time
+                    var nextTask = dateFormatter.format(nextTaskDate)
 
-                    task["deadline"] = nextTaskDate.toString()
+                    task["deadline"] = nextTask.toString()
 
                     db.collection(userId).add(task)
                             .addOnCompleteListener {
@@ -119,9 +120,10 @@ class AddTaskActivity : AppCompatActivity() {
                     // Add one week each time
                     deadlineCalendar.add(Calendar.WEEK_OF_YEAR, 1)
                     // Convert it to a string to format with time.
-                    var nextTaskDate = deadlineCalendar.time.toString()
+                    var nextTaskDate = deadlineCalendar.time
+                    var nextTask = dateFormatter.format(nextTaskDate)
 
-                    task["deadline"] = nextTaskDate.toString()
+                    task["deadline"] = nextTask.toString()
 
                     db.collection(userId).add(task)
                             .addOnCompleteListener {
@@ -140,7 +142,10 @@ class AddTaskActivity : AppCompatActivity() {
                         // Add one month each time
                         deadlineCalendar.add(java.util.Calendar.MONTH, 1)
                         // Convert it to a string to format with time.
-                        var nextTaskDate = deadlineCalendar.time.toString()
+                        var nextTaskDate = deadlineCalendar.time
+                        var nextTask = dateFormatter.format(nextTaskDate)
+
+                        task["deadline"] = nextTask.toString()
 
 //                        task["name"] = taskName.text.toString()
 //                        task["description"] = taskDescription.text.toString()

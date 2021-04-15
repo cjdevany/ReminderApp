@@ -46,18 +46,14 @@ class ViewTaskActivity : AppCompatActivity() {
 //        val test = SimpleDateFormat(Calendar.LONG_FORMAT)
         val taskDeadlineVar = intent.getStringExtra("deadline")?.split(" ")!!
 
-//        for (x in intent.getStringExtra("deadline")?.split(" ")!!) {
-//            Toast.makeText(this, x.toString(), Toast.LENGTH_SHORT).show()
-//        }
-
         taskName.setText(intent.getStringExtra("name").toString())
         taskDescription.setText(intent.getStringExtra("description").toString())
         taskDate.setText(taskDeadlineVar[0])
         taskTime.setText(taskDeadlineVar[1])
 
-        var documentId = intent.getStringArrayExtra("documentID").toString()
-        val userId = intent.getStringArrayExtra("uid").toString()
-        var interval = intent.getStringArrayExtra("interval").toString()
+        var documentId = intent.getStringExtra("documentID").toString()
+        val userId = intent.getStringExtra("uid").toString()
+        var interval = intent.getStringExtra("interval").toString()
 
         viewTaskButton.setOnClickListener {
             var radioId = radioGroup.checkedRadioButtonId
@@ -74,9 +70,8 @@ class ViewTaskActivity : AppCompatActivity() {
             
             db.collection(userId).document(documentId).set(task).addOnCompleteListener { 
                 if (it.isSuccessful) {
-                    taskName.setText(documentId)
                     Toast.makeText(this, "Task Updated", Toast.LENGTH_SHORT).show()
-//                    finish()
+                    finish()
                 } else {
                     Toast.makeText(this, "There was a problem updating the task.", Toast.LENGTH_SHORT).show()
                 }
