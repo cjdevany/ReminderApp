@@ -1,5 +1,6 @@
 package com.example.reminderapp
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.*
@@ -166,6 +167,7 @@ class AddTaskActivity : AppCompatActivity() {
             taskDescription.setText("")
             taskDate.setText("")
             taskTime.setText("")
+            startActivity(Intent(this, DashboardActivity::class.java))
         }
     }
 
