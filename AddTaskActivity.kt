@@ -2,7 +2,6 @@ package com.example.reminderapp
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.*
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -36,9 +35,6 @@ class AddTaskActivity : AppCompatActivity() {
         var deadline : Date = Date()
         // Formats a date from the user's input.
         val dateFormatter = SimpleDateFormat("MM/dd/yyyy HH:mm")
-        // Formatters to get the day/month/year from the date the user entered.
-        val getDay = SimpleDateFormat("dd")
-        val getMonth = SimpleDateFormat("MM")
 
         // Button variable
         val addTaskButton = findViewById<Button>(R.id.addTaskButton)
@@ -53,25 +49,30 @@ class AddTaskActivity : AppCompatActivity() {
             val time_var = taskTime.text.toString()
             val dateTime = date_var + " " + time_var
             deadline = dateFormatter.parse(dateTime)
+
             var creationTime = dateFormatter.format(Date()).toString()
 
             // Formatters to get day/month/year from date object.
             var getDay = SimpleDateFormat("dd")
             var getMonth = SimpleDateFormat("MM")
             var getYear = SimpleDateFormat("yyyy")
+            var getHour = SimpleDateFormat("HH")
+            var getMinute = SimpleDateFormat("mm")
             var taskDay = getDay.format(deadline).toInt()
             var taskMonth = getMonth.format(deadline).toInt()
             var taskYear = getYear.format(deadline).toInt()
+            var taskHour = getHour.format(deadline).toInt()
+            var taskMinute = getMinute.format(deadline).toInt()
 
             var deadlineCalendar = Calendar.getInstance()
             // Offset month by 1 because January is month 0.
-            deadlineCalendar.set(taskYear, taskMonth-1, taskDay)
+            deadlineCalendar.set(taskYear, taskMonth-1, taskDay, taskHour, taskMinute, 0)
 
             // First instance of the task
             val task : MutableMap<String, Any?> = HashMap()
             task["name"] = taskName.text.toString()
             task["description"] = taskDescription.text.toString()
-            task["deadline"] = deadline.toString()
+            task["deadline"] = dateTime.toString()
             task["created"] = creationTime.toString()
             task["interval"] = radioButton.text.toString()
 
@@ -91,19 +92,16 @@ class AddTaskActivity : AppCompatActivity() {
             var numOccurences : Int = 0
             if (selectedInterval.equals("Daily")) {
                 // One Month of tasks
-                numOccurences = 30
+//                numOccurences = 30
+                numOccurences = 5
                 for (i in 0..numOccurences) {
                     // Add one day each time
-                    deadlineCalendar.roll(Calendar.DATE, 1)
+                    deadlineCalendar.add(Calendar.DATE, 1)
                     // Convert it to a string to format with time.
-                    var nextTaskDate = "${deadlineCalendar.get(Calendar.MONTH)}/${deadlineCalendar.get(Calendar.DAY_OF_MONTH)}/${deadlineCalendar.get(Calendar.YEAR)}"
-                    var nextTaskDateTime = nextTaskDate + " " + time_var
-                    var nextTask = dateFormatter.parse(nextTaskDateTime)
-                    task["name"] = taskName.text.toString()
-                    task["description"] = taskDescription.text.toString()
-                    task["deadline"] = nextTask.toString()
-                    task["created"] = creationTime.toString()
-                    task["interval"] = radioButton.text.toString()
+                    var nextTaskDate = deadlineCalendar.time.toString()
+
+                    task["deadline"] = nextTaskDate.toString()
+
                     db.collection(userId).add(task)
                             .addOnCompleteListener {
                                 if (it.isSuccessful) {
@@ -115,19 +113,16 @@ class AddTaskActivity : AppCompatActivity() {
                 }
             } else if (selectedInterval.equals("Weekly")) {
                 // About 3 months of tasks
-                numOccurences = 13
-                for (i in 1..numOccurences) {
+//                numOccurences = 13
+                numOccurences = 5
+                for (i in 0..numOccurences) {
                     // Add one week each time
-                    deadlineCalendar.roll(Calendar.WEEK_OF_YEAR, 1)
+                    deadlineCalendar.add(Calendar.WEEK_OF_YEAR, 1)
                     // Convert it to a string to format with time.
-                    var nextTaskDate = "${deadlineCalendar.get(Calendar.MONTH)}/${deadlineCalendar.get(Calendar.DAY_OF_MONTH)}/${deadlineCalendar.get(Calendar.YEAR)}"
-                    var nextTaskDateTime = nextTaskDate + " " + time_var
-                    var nextTask = dateFormatter.parse(nextTaskDateTime)
-                    task["name"] = taskName.text.toString()
-                    task["description"] = taskDescription.text.toString()
-                    task["deadline"] = nextTask.toString()
-                    task["created"] = creationTime.toString()
-                    task["interval"] = radioButton.text.toString()
+                    var nextTaskDate = deadlineCalendar.time.toString()
+
+                    task["deadline"] = nextTaskDate.toString()
+
                     db.collection(userId).add(task)
                             .addOnCompleteListener {
                                 if (it.isSuccessful) {
@@ -138,24 +133,34 @@ class AddTaskActivity : AppCompatActivity() {
                             }
                 }
             } else if (selectedInterval.equals("Monthly")) {
-                // One year of tasks
-                numOccurences = 12
-                for (i in 1..numOccurences) {
-                    // Add one month each time
-                    deadlineCalendar.roll(java.util.Calendar.MONTH, 1)
-                    // Convert it to a string to format with time.
-                    var nextTaskDate = "${deadlineCalendar.get(Calendar.MONTH)}/${deadlineCalendar.get(Calendar.DAY_OF_MONTH)}/${deadlineCalendar.get(Calendar.YEAR)}"
-                    var nextTaskDateTime = nextTaskDate + " " + time_var
-                    var nextTask = dateFormatter.parse(nextTaskDateTime)
-                    task["name"] = taskName.text.toString()
-                    task["description"] = taskDescription.text.toString()
-                    task["deadline"] = nextTask.toString()
-                    task["created"] = creationTime.toString()
-                    task["interval"] = radioButton.text.toString()
-                    db.collection(userId).add(task)
+                    // One year of tasks
+//                    numOccurences = 12
+                    numOccurences = 5
+                    for (i in 0..numOccurences) {
+                        // Add one month each time
+                        deadlineCalendar.add(java.util.Calendar.MONTH, 1)
+                        // Convert it to a string to format with time.
+                        var nextTaskDate = deadlineCalendar.time.toString()
 
-                }
+//                        task["name"] = taskName.text.toString()
+//                        task["description"] = taskDescription.text.toString()
+                        task["deadline"] = nextTaskDate.toString()
+//                        task["created"] = creationTime.toString()
+//                        task["interval"] = radioButton.text.toString()
+                        db.collection(userId).add(task)
+                                .addOnCompleteListener {
+                                    if (it.isSuccessful) {
+                                        android.widget.Toast.makeText(this, "Task Added", android.widget.Toast.LENGTH_SHORT).show()
+                                    } else {
+                                        android.widget.Toast.makeText(this, "Problem Adding Task", android.widget.Toast.LENGTH_SHORT).show()
+                                    }
+                                }
+                    }
             }
+            taskName.setText("")
+            taskDescription.setText("")
+            taskDate.setText("")
+            taskTime.setText("")
         }
     }
 
