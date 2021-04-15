@@ -1,5 +1,6 @@
 package com.example.reminderapp
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.TextUtils.split
@@ -71,7 +72,8 @@ class ViewTaskActivity : AppCompatActivity() {
             db.collection(userId).document(documentId).set(task).addOnCompleteListener { 
                 if (it.isSuccessful) {
                     Toast.makeText(this, "Task Updated", Toast.LENGTH_SHORT).show()
-                    finish()
+//                    finish()
+                    startActivity(Intent(this, DashboardActivity::class.java))
                 } else {
                     Toast.makeText(this, "There was a problem updating the task.", Toast.LENGTH_SHORT).show()
                 }
