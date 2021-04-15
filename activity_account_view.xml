@@ -6,4 +6,35 @@
     android:layout_height="match_parent"
     tools:context=".AccountViewActivity">
 
+    <ImageView
+        android:id="@+id/accountViewImageView"
+        android:layout_width="86dp"
+        android:layout_height="83dp"
+        android:layout_marginTop="156dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/common_google_signin_btn_icon_disabled" />
+
+    <TextView
+        android:id="@+id/AccountViewEmailLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="36dp"
+        android:text="TextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/accountViewImageView" />
+
+    <Button
+        android:id="@+id/accountViewSignOutButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="44dp"
+        android:text="Sign Out"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/AccountViewEmailLabel" />
 </androidx.constraintlayout.widget.ConstraintLayout>

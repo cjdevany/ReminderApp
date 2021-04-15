@@ -23,15 +23,14 @@ class DashboardActivity : AppCompatActivity() {
         setContentView(R.layout.activity_dashboard)
 
         //get the user's id
-        var uid = "123456789"
-        //var uid = auth.currentUser.uid
+        var uid = auth.currentUser.uid
+
         //get all tasks from that uid
         var tasks = arrayListOf<MutableMap<String, Any?>>()
         var accountBtn = findViewById<Button>(R.id.dashboardAccountBtn)
         var addBtn = findViewById<Button>(R.id.dashboardAddTaskBtn)
 
-        db.collection("tasks")
-            .whereEqualTo("uid", uid)
+        db.collection(uid)
             .get()
             .addOnSuccessListener { documents ->
                 //for each document, grab its data and add it to the list of all user tasks
@@ -50,16 +49,26 @@ class DashboardActivity : AppCompatActivity() {
                 listView.setOnItemClickListener { parent, view, position, id ->
                     var intent = Intent(this, ViewTaskActivity::class.java)
                     //TODO: add the task data needed to the intent before spawning ViewTaskActivity
+                    Toast.makeText(this, "clicked position " + position, Toast.LENGTH_SHORT).show()
+
+                    var task = tasks.get(position)
+                    intent.putExtra("uid", auth.currentUser.uid)
+                    intent.putExtra("documentID", task["documentID"] as String)
+                    intent.putExtra("created", task["created"] as String)
+                    intent.putExtra("deadline", task["deadline"] as String)
+                    intent.putExtra("description", task["description"] as String)
+                    intent.putExtra("interval", task["interval"] as String)
+                    intent.putExtra("name", task["name"] as String)
                     startActivity(intent)
                 }
             }
             .addOnFailureListener { exception ->
                 Toast.makeText(this, "Error pulling user data", Toast.LENGTH_SHORT).show()
-                Log.w("TAG", "Error getting documents: ", exception)                
+                Log.w("TAG", "Error getting documents: ", exception)
             }
 
         accountBtn.setOnClickListener {
-            var intent = Intent(this, AccountView::class.java)
+            var intent = Intent(this, AccountViewActivity::class.java)
             startActivity(intent)
         }
 
