@@ -102,7 +102,7 @@ class AddTaskActivity : AppCompatActivity() {
                     var nextTaskDate = deadlineCalendar.time
                     var nextTask = dateFormatter.format(nextTaskDate)
 
-                    task["deadline"] = nextTask.toString()
+                    task["deadline"] = "${deadlineCalendar.get(Calendar.MONTH)}/${deadlineCalendar.get(Calendar.DAY_OF_MONTH)}/${deadlineCalendar.get(Calendar.YEAR)} ${deadlineCalendar.get(Calendar.HOUR_OF_DAY)}:${deadlineCalendar.get(Calendar.MINUTE)}"
 
                     db.collection(userId).add(task)
                             .addOnCompleteListener {
@@ -124,7 +124,7 @@ class AddTaskActivity : AppCompatActivity() {
                     var nextTaskDate = deadlineCalendar.time
                     var nextTask = dateFormatter.format(nextTaskDate)
 
-                    task["deadline"] = nextTask.toString()
+                    task["deadline"] = "${deadlineCalendar.get(Calendar.MONTH)}/${deadlineCalendar.get(Calendar.DAY_OF_MONTH)}/${deadlineCalendar.get(Calendar.YEAR)} ${deadlineCalendar.get(Calendar.HOUR_OF_DAY)}:${deadlineCalendar.get(Calendar.MINUTE)}"
 
                     db.collection(userId).add(task)
                             .addOnCompleteListener {
@@ -136,32 +136,32 @@ class AddTaskActivity : AppCompatActivity() {
                             }
                 }
             } else if (selectedInterval.equals("Monthly")) {
-                    // One year of tasks
+                // One year of tasks
 //                    numOccurences = 12
-                    numOccurences = 5
-                    for (i in 0..numOccurences) {
-                        // Add one month each time
-                        deadlineCalendar.add(java.util.Calendar.MONTH, 1)
-                        // Convert it to a string to format with time.
-                        var nextTaskDate = deadlineCalendar.time
-                        var nextTask = dateFormatter.format(nextTaskDate)
+                numOccurences = 5
+                for (i in 0..numOccurences) {
+                    // Add one month each time
+                    deadlineCalendar.add(java.util.Calendar.MONTH, 1)
+                    // Convert it to a string to format with time.
+                    var nextTaskDate = deadlineCalendar.time
+                    var nextTask = dateFormatter.format(nextTaskDate)
 
-                        task["deadline"] = nextTask.toString()
+                    task["deadline"] = nextTask.toString()
 
 //                        task["name"] = taskName.text.toString()
 //                        task["description"] = taskDescription.text.toString()
-                        task["deadline"] = nextTaskDate.toString()
+                    task["deadline"] = "${deadlineCalendar.get(Calendar.MONTH)}/${deadlineCalendar.get(Calendar.DAY_OF_MONTH)}/${deadlineCalendar.get(Calendar.YEAR)} ${deadlineCalendar.get(Calendar.HOUR_OF_DAY)}:${deadlineCalendar.get(Calendar.SHORT)}"
 //                        task["created"] = creationTime.toString()
 //                        task["interval"] = radioButton.text.toString()
-                        db.collection(userId).add(task)
-                                .addOnCompleteListener {
-                                    if (it.isSuccessful) {
-                                        android.widget.Toast.makeText(this, "Task Added", android.widget.Toast.LENGTH_SHORT).show()
-                                    } else {
-                                        android.widget.Toast.makeText(this, "Problem Adding Task", android.widget.Toast.LENGTH_SHORT).show()
-                                    }
+                    db.collection(userId).add(task)
+                            .addOnCompleteListener {
+                                if (it.isSuccessful) {
+                                    android.widget.Toast.makeText(this, "Task Added", android.widget.Toast.LENGTH_SHORT).show()
+                                } else {
+                                    android.widget.Toast.makeText(this, "Problem Adding Task", android.widget.Toast.LENGTH_SHORT).show()
                                 }
-                    }
+                            }
+                }
             }
             taskName.setText("")
             taskDescription.setText("")
