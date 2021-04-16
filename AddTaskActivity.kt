@@ -3,6 +3,7 @@ package com.example.reminderapp
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.*
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -98,11 +99,22 @@ class AddTaskActivity : AppCompatActivity() {
                 for (i in 0..numOccurences) {
                     // Add one day each time
                     deadlineCalendar.add(Calendar.DATE, 1)
+                    Log.w("***Deadline Day", deadlineCalendar.get(Calendar.MONTH).toString())
                     // Convert it to a string to format with time.
                     var nextTaskDate = deadlineCalendar.time
                     var nextTask = dateFormatter.format(nextTaskDate)
 
-                    task["deadline"] = "${deadlineCalendar.get(Calendar.MONTH)}/${deadlineCalendar.get(Calendar.DAY_OF_MONTH)}/${deadlineCalendar.get(Calendar.YEAR)} ${deadlineCalendar.get(Calendar.HOUR_OF_DAY)}:${deadlineCalendar.get(Calendar.MINUTE)}"
+                    //Need to style the minutes, so that they look normal. i.e. 17:00 doesn't look like 17:0 or 17:06 isn't 17:6
+                    var minuteStr: String
+                    var minute = deadlineCalendar.get(Calendar.MINUTE)
+                    if(minute == 0)
+                        minuteStr = "00"
+                    else if(minute < 10)
+                        minuteStr = "0$minute"
+                    else
+                        minuteStr = "$minute"
+
+                    task["deadline"] = "${deadlineCalendar.get(Calendar.MONTH)}/${deadlineCalendar.get(Calendar.DAY_OF_MONTH)}/${deadlineCalendar.get(Calendar.YEAR)} ${deadlineCalendar.get(Calendar.HOUR_OF_DAY)}:$minuteStr"
 
                     db.collection(userId).add(task)
                             .addOnCompleteListener {
@@ -124,7 +136,17 @@ class AddTaskActivity : AppCompatActivity() {
                     var nextTaskDate = deadlineCalendar.time
                     var nextTask = dateFormatter.format(nextTaskDate)
 
-                    task["deadline"] = "${deadlineCalendar.get(Calendar.MONTH)}/${deadlineCalendar.get(Calendar.DAY_OF_MONTH)}/${deadlineCalendar.get(Calendar.YEAR)} ${deadlineCalendar.get(Calendar.HOUR_OF_DAY)}:${deadlineCalendar.get(Calendar.MINUTE)}"
+                    //Need to style the minutes, so that they look normal. i.e. 17:00 doesn't look like 17:0 or 17:06 isn't 17:6
+                    var minuteStr: String
+                    var minute = deadlineCalendar.get(Calendar.MINUTE)
+                    if(minute == 0)
+                        minuteStr = "00"
+                    else if(minute < 10)
+                        minuteStr = "0$minute"
+                    else
+                        minuteStr = "$minute"
+
+                    task["deadline"] = "${deadlineCalendar.get(Calendar.MONTH)}/${deadlineCalendar.get(Calendar.DAY_OF_MONTH)}/${deadlineCalendar.get(Calendar.YEAR)} ${deadlineCalendar.get(Calendar.HOUR_OF_DAY)}:$minuteStr"
 
                     db.collection(userId).add(task)
                             .addOnCompleteListener {
@@ -148,9 +170,19 @@ class AddTaskActivity : AppCompatActivity() {
 
                     task["deadline"] = nextTask.toString()
 
+                    //Need to style the minutes, so that they look normal. i.e. 17:00 doesn't look like 17:0 or 17:06 isn't 17:6
+                    var minuteStr: String
+                    var minute = deadlineCalendar.get(Calendar.MINUTE)
+                    if(minute == 0)
+                        minuteStr = "00"
+                    else if(minute < 10)
+                        minuteStr = "0$minute"
+                    else
+                        minuteStr = "$minute"
+
 //                        task["name"] = taskName.text.toString()
 //                        task["description"] = taskDescription.text.toString()
-                    task["deadline"] = "${deadlineCalendar.get(Calendar.MONTH)}/${deadlineCalendar.get(Calendar.DAY_OF_MONTH)}/${deadlineCalendar.get(Calendar.YEAR)} ${deadlineCalendar.get(Calendar.HOUR_OF_DAY)}:${deadlineCalendar.get(Calendar.SHORT)}"
+                    task["deadline"] = "${deadlineCalendar.get(Calendar.MONTH)}/${deadlineCalendar.get(Calendar.DAY_OF_MONTH)}/${deadlineCalendar.get(Calendar.YEAR)} ${deadlineCalendar.get(Calendar.HOUR_OF_DAY)}:$minuteStr"
 //                        task["created"] = creationTime.toString()
 //                        task["interval"] = radioButton.text.toString()
                     db.collection(userId).add(task)
