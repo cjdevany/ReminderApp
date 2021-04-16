@@ -68,7 +68,7 @@ class AddTaskActivity : AppCompatActivity() {
 
             var deadlineCalendar = Calendar.getInstance()
             // Offset month by 1 because January is month 0.
-            deadlineCalendar.set(taskYear, taskMonth-1, taskDay, taskHour, taskMinute, 0)
+            deadlineCalendar.set(taskYear, taskMonth, taskDay, taskHour, taskMinute, 0)
 
             // First instance of the task
             val task : MutableMap<String, Any?> = HashMap()
@@ -98,7 +98,7 @@ class AddTaskActivity : AppCompatActivity() {
                 numOccurences = 5
                 for (i in 0..numOccurences) {
                     // Add one day each time
-                    deadlineCalendar.add(Calendar.DATE, 1)
+                    deadlineCalendar.add(Calendar.HOUR, 24)
                     Log.w("***Deadline Day", deadlineCalendar.get(Calendar.MONTH).toString())
                     // Convert it to a string to format with time.
                     var nextTaskDate = deadlineCalendar.time
