@@ -1,6 +1,7 @@
 package com.example.reminderapp
 
 import android.content.Intent
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.TextUtils.split
@@ -42,6 +43,9 @@ class ViewTaskActivity : AppCompatActivity() {
 
         // Button variable
         val viewTaskButton = findViewById<Button>(R.id.viewTaskButton)
+        val deleteTaskButton = findViewById<Button>(R.id.viewTaskDeleteButton)
+        deleteTaskButton.setBackgroundColor(Color.RED)
+        deleteTaskButton.setTextColor(Color.WHITE)
 
         // Get date and time from intent and format them.
 //        val test = SimpleDateFormat(Calendar.LONG_FORMAT)
@@ -68,8 +72,8 @@ class ViewTaskActivity : AppCompatActivity() {
             task["deadline"] = taskDate.text.toString() + " " + taskTime.text.toString()
             task["created"] = dateFormatter.format(Date()).toString()
             task["interval"] = radioButton.text.toString()
-            
-            db.collection(userId).document(documentId).set(task).addOnCompleteListener { 
+
+            db.collection(userId).document(documentId).set(task).addOnCompleteListener {
                 if (it.isSuccessful) {
                     Toast.makeText(this, "Task Updated", Toast.LENGTH_SHORT).show()
 //                    finish()
@@ -77,6 +81,14 @@ class ViewTaskActivity : AppCompatActivity() {
                 } else {
                     Toast.makeText(this, "There was a problem updating the task.", Toast.LENGTH_SHORT).show()
                 }
+            }
+        }
+
+        deleteTaskButton.setOnClickListener {
+            var db = FirebaseFirestore.getInstance()
+            db.collection(userId).document(documentId).delete().addOnCompleteListener {
+                Toast.makeText(this, "Record deleted", Toast.LENGTH_SHORT).show()
+                startActivity(Intent(this, DashboardActivity::class.java))
             }
         }
 

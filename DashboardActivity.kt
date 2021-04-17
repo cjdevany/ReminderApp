@@ -31,44 +31,41 @@ class DashboardActivity : AppCompatActivity() {
         var addBtn = findViewById<Button>(R.id.dashboardAddTaskBtn)
 
         db.collection(uid)
-            .get()
-            .addOnSuccessListener { documents ->
-                //for each document, grab its data and add it to the list of all user tasks
-                for (document in documents) {
-                    if(document != null) {
-                        var task = document.data as MutableMap<String, Any?>
-                        task["documentID"] = document.id
-                        tasks.add(task)
+                .get()
+                .addOnSuccessListener { documents ->
+                    //for each document, grab its data and add it to the list of all user tasks
+                    for (document in documents) {
+                        if(document != null) {
+                            var task = document.data as MutableMap<String, Any?>
+                            task["documentID"] = document.id
+                            tasks.add(task)
+                        }
+                    }
+                    sort(tasks, 0, tasks.size - 1)
 
+                    //spawn in the listview and add the proper contents to it
+                    var listView = findViewById<ListView>(R.id.dashboardListView)
+                    var listAdapter = MyAdapter(tasks, this)
+
+                    listView.adapter = listAdapter
+                    listView.setOnItemClickListener { parent, view, position, id ->
+                        var intent = Intent(this, ViewTaskActivity::class.java)
+
+                        var task = tasks.get(position)
+                        intent.putExtra("uid", auth.currentUser.uid)
+                        intent.putExtra("documentID", task["documentID"] as String)
+                        intent.putExtra("created", task["created"] as String)
+                        intent.putExtra("deadline", task["deadline"] as String)
+                        intent.putExtra("description", task["description"] as String)
+                        intent.putExtra("interval", task["interval"] as String)
+                        intent.putExtra("name", task["name"] as String)
+                        startActivity(intent)
                     }
                 }
-                sort(tasks, 0, tasks.size - 1)
-
-                //spawn in the listview and add the proper contents to it
-                var listView = findViewById<ListView>(R.id.dashboardListView)
-                var listAdapter = MyAdapter(tasks, this)
-
-                listView.adapter = listAdapter
-                listView.setOnItemClickListener { parent, view, position, id ->
-                    var intent = Intent(this, ViewTaskActivity::class.java)
-                    //TODO: add the task data needed to the intent before spawning ViewTaskActivity
-                    Toast.makeText(this, "clicked position " + position, Toast.LENGTH_SHORT).show()
-
-                    var task = tasks.get(position)
-                    intent.putExtra("uid", auth.currentUser.uid)
-                    intent.putExtra("documentID", task["documentID"] as String)
-                    intent.putExtra("created", task["created"] as String)
-                    intent.putExtra("deadline", task["deadline"] as String)
-                    intent.putExtra("description", task["description"] as String)
-                    intent.putExtra("interval", task["interval"] as String)
-                    intent.putExtra("name", task["name"] as String)
-                    startActivity(intent)
+                .addOnFailureListener { exception ->
+                    Toast.makeText(this, "Error pulling user data", Toast.LENGTH_SHORT).show()
+                    Log.w("TAG", "Error getting documents: ", exception)
                 }
-            }
-            .addOnFailureListener { exception ->
-                Toast.makeText(this, "Error pulling user data", Toast.LENGTH_SHORT).show()
-                Log.w("TAG", "Error getting documents: ", exception)
-            }
 
         accountBtn.setOnClickListener {
             var intent = Intent(this, AccountViewActivity::class.java)
